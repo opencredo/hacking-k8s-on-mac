@@ -1,0 +1,34 @@
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: ClusterConfiguration
+imageRepository: ${accountId}.dkr.ecr.${region}.amazonaws.com
+kubernetesVersion: ${version}
+networking:
+  podSubnet: "192.168.0.0/16"
+apiServer:
+  extraArgs:
+    # Use the AWS cloud provider
+    cloud-provider: aws
+clusterName: ${name}
+controllerManager:
+  extraArgs:
+    # Use the AWS cloud provider
+    cloud-provider: aws
+    # Unsure what this does
+    configure-cloud-routes: "false"
+etcd:
+  local:
+    # etcd should use the default image repository rather than the custom one
+    imageRepository: k8s.gcr.io
+dns:
+  # DNS should use the default image repository rather than the custom one
+  imageRepository: k8s.gcr.io
+---
+apiVersion: kubeadm.k8s.io/v1beta1
+kind: InitConfiguration
+nodeRegistration:
+  kubeletExtraArgs:
+    # Use the AWS cloud provider
+    cloud-provider: aws
+    # `imageRepository` will make kubelet look at the custom repo for the pause image, so point it back
+    pod-infra-container-image: k8s.gcr.io/pause:3.1
+    cgroup-driver: systemd
