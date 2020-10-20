@@ -8,7 +8,7 @@ resource "aws_launch_template" "nodes" {
     name = aws_iam_instance_profile.iam.name
   }
 
-  user_data = data.template_cloudinit_config.nodes.rendered
+  user_data = data.cloudinit_config.nodes.rendered
 
   block_device_mappings {
     device_name = data.aws_ami.ubuntu_1804.root_device_name
@@ -66,7 +66,7 @@ resource "aws_autoscaling_group" "nodes" {
   ]
 }
 
-data "template_cloudinit_config" "nodes" {
+data "cloudinit_config" "nodes" {
   part {
     content_type = "text/x-shellscript"
     content      = templatefile("${path.module}/templates/install.sh", { bucket : aws_s3_bucket.config.bucket })

@@ -6,7 +6,7 @@ resource "aws_instance" "master" {
   subnet_id              = aws_subnet.subnets[0].id
   iam_instance_profile   = aws_iam_instance_profile.iam.name
 
-  user_data = data.template_cloudinit_config.master.rendered
+  user_data = data.cloudinit_config.master.rendered
 
   root_block_device {
     volume_size = 40
@@ -23,7 +23,7 @@ resource "aws_instance" "master" {
   ]
 }
 
-data "template_cloudinit_config" "master" {
+data "cloudinit_config" "master" {
   part {
     content_type = "text/x-shellscript"
     content      = templatefile("${path.module}/templates/install.sh", { bucket : aws_s3_bucket.config.bucket })

@@ -43,19 +43,19 @@ resource "aws_s3_bucket_object" "kubectl" {
 resource "aws_s3_bucket_object" "kubelet-service" {
   bucket = aws_s3_bucket.config.bucket
   key    = "kubelet.service"
-  source = "${var.kubernetes_directory}/build/debs/kubelet.service"
+  source = "${path.module}/files/kubelet.service"
 }
 
 resource "aws_s3_bucket_object" "ten-kubeadm-conf" {
   bucket = aws_s3_bucket.config.bucket
   key    = "10-kubeadm.conf"
-  source = "${var.kubernetes_directory}/build/debs/10-kubeadm.conf"
+  source = "${path.module}/files/10-kubeadm.conf"
 }
 
 resource "aws_s3_bucket_object" "fifty-kubeadm-conf" {
   bucket = aws_s3_bucket.config.bucket
   key    = "50-kubeadm.conf"
-  source = "${var.kubernetes_directory}/build/debs/50-kubeadm.conf"
+  source = "${path.module}/files/50-kubeadm.conf"
 }
 
 resource "null_resource" "s3_objects" {
